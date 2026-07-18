@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Contract {
+  id               String   @id @default(cuid())
+  originalFileName String
+  fileUrl          String
+  extractedText    String   @db.Text
+  markdownSummary  String   @db.Text
+  contractType     String?
+  title            String?
+  purpose          String?  @db.Text
+  confidenceScore  Int?
+  coverageScore    Int?
+  status           ContractStatus @default(PENDING)
+  questionCount    Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  analyses         ContractAnalysis[]
+  chats            ChatMessage[]
+}
+
+model ContractAnalysis {
+  id          String   @id @default(cuid())
+  contractId  String
+  contract    Contract @relation(fields: [contractId], references: [id])
+  category    AnalysisCategory
+  title       String
+  description String @db.Text
+  severity    RiskSeverity
+  evidence    String?  @db.Text
+  createdAt   DateTime @default(now())
+}
+
+model ChatMessage {
+  id         String   @id @default(cuid())
+  contractId String
+  contract   Contract @relation(fields: [contractId], references: [id])
+  role       ChatRole
+  content    String   @db.Text
+  createdAt  DateTime @default(now())
+}
+
+enum ContractStatus {
+  PENDING
+  PROCESSING
+  READY
+  FAILED
+}
+
+enum AnalysisCategory {
+  PAYMENT
+  PENALTY
+  TERMINATION
+  OBLIGATION
+  RISK
+  UNUSUAL
+  OTHER
+}
+
+enum RiskSeverity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ChatRole {
+  USER
+  ASSISTANT
+}

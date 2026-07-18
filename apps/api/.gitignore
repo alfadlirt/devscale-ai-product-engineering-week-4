@@ -1,0 +1,14 @@
+# Package-local ignores (root .gitignore also covers these)
+
+node_modules/
+dist/
+.env
+.env.*
+!.env-example
+
+# Prisma generated client
+/src/generated/prisma/
+
+# Uploaded PDFs (keep folder)
+/uploads/*
+!/uploads/.gitkeep
