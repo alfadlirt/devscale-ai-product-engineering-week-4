@@ -4,7 +4,7 @@ import type { ContractDetail } from "@/utils/contract-types";
 export type { ContractDetail } from "@/utils/contract-types";
 export { MAX_CONTRACT_QUESTIONS } from "@/utils/contract-types";
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 export type ContractListItem = {
   id: string;

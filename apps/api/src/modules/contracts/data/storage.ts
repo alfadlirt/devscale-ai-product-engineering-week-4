@@ -1,10 +1,8 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
-const uploadsDir = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "../../../../uploads",
+const uploadsDir = path.resolve(
+  process.env.UPLOAD_DIR ?? path.join(process.cwd(), "uploads"),
 );
 
 export function getUploadsDir() {
