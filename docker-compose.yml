@@ -18,7 +18,8 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile.api
+      dockerfile: Dockerfile
+      target: api
     command: sh -c "pnpm --filter=api db:deploy && pnpm --filter=api start"
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/contract_analyzer
@@ -42,7 +43,8 @@ services:
   worker:
     build:
       context: .
-      dockerfile: Dockerfile.api
+      dockerfile: Dockerfile
+      target: api
     command: pnpm --filter=api worker:prod
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/contract_analyzer
@@ -62,11 +64,12 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.frontend
+      dockerfile: Dockerfile
+      target: frontend
       args:
         VITE_API_URL: ${VITE_API_URL}
     ports:
-      - "8080:80"
+      - "5137:5137"
     depends_on:
       - api
     restart: unless-stopped
